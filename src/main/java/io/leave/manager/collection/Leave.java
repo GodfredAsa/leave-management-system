@@ -1,4 +1,4 @@
-package io.leave.manager.model;
+package io.leave.manager.collection;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -17,5 +17,5 @@ public class Leave {
     private String leaveId;
     private Date startDate;
     private Date endDate;
-    private Employee employee;
+    private User user;
 }
