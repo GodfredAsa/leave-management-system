@@ -1,26 +1,23 @@
 package io.leave.manager.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import io.leave.manager.exception.collection.EmailNotFoundException;
+import io.leave.manager.exception.collection.UserNotFoundException;
 import io.leave.manager.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.persistence.NoResultException;
 
 import static org.springframework.http.HttpStatus.*;
 
-public class ExceptionHandling implements ErrorController {
+public class ExceptionHandling {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-    private static final String METHOD_IS_NOT_ALLOWED = "This request method is not allowed on this endpoint. Please send a '%s' request";
     private static final String INTERNAL_SERVER_ERROR_MSG = "An error occurred while processing the request";
-    private static final String INCORRECT_CREDENTIALS = "Email / password incorrect. Please try again";
-    public static final String ERROR_PATH = "/error";
-
+    private static final String INCORRECT_CREDENTIALS = "Invalid username or password incorrect. Please try again";
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<HttpResponse> badCredentialsException() {
@@ -37,14 +34,20 @@ public class ExceptionHandling implements ErrorController {
                 httpStatus.getReasonPhrase().toUpperCase(), message), httpStatus);
     }
 
-    @ExceptionHandler(NoResultException.class)
-    public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
         LOGGER.error(exception.getMessage());
-        return createHttpResponse(NOT_FOUND, exception.getMessage());
+        return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
 
-    @Override
-    public String getErrorPath() {
-        return ERROR_PATH;
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
+
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
 }

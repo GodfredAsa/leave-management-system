@@ -4,12 +4,9 @@ import io.leave.manager.collection.User;
 import io.leave.manager.exception.ExceptionHandling;
 import io.leave.manager.exception.collection.EmailExistsException;
 import io.leave.manager.exception.collection.EmailNotFoundException;
-import io.leave.manager.exception.collection.EmployeeNotFoundException;
+import io.leave.manager.exception.collection.UserNotFoundException;
 import io.leave.manager.service.UserService;
-import io.leave.manager.utils.JWTTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +16,17 @@ import javax.mail.MessagingException;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(value = "api/employees")
+@RequiredArgsConstructor
+@RequestMapping(value = "api/")
 public class UserRestController extends ExceptionHandling {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final JWTTokenProvider jwtTokenProvider;
 
-    @Autowired
-    public UserRestController(AuthenticationManager authenticationManager, UserService userService, JWTTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     //    REGISTRATION
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<User> createEmployee(@RequestBody User user) throws MessagingException, EmailExistsException, EmployeeNotFoundException, EmailNotFoundException {
+    public ResponseEntity<User> createEmployee(@RequestBody User user) throws MessagingException, EmailExistsException, UserNotFoundException, EmailNotFoundException {
         User newUser = userService.createEmployee(user);
         return new ResponseEntity<>(newUser, OK);
     }

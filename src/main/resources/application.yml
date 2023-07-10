@@ -1,5 +1,5 @@
-jwt:
-  secret: fred
+#jwt:
+#  secret: fred
 server:
   port: 8081
 
@@ -14,7 +14,7 @@ spring:
       password: password
       username: admin
       auto-index-creation: true
-#      uri: mongodb://localhost:27017/leavedb
+      uri: mongodb://localhost:27017/leavedb
 
   mvc:
     pathmatch:

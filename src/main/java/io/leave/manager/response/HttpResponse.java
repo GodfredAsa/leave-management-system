@@ -1,12 +1,9 @@
 package io.leave.manager.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
-
 import java.util.Date;
 
 @Getter
@@ -23,6 +20,7 @@ public class HttpResponse {
         this.httpStatusCode = httpStatusCode;
         this.httpStatus = httpStatus;
         this.reason = reason;
+        this.timeStamp = new Date();
         this.message = message;
     }
 }
