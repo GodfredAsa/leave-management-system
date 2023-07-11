@@ -39,7 +39,7 @@ or the system auto-approves based on the current day been equal to leave start d
 2. Leave status ```PENDING OR CONFIRMED```
 3. THE ADMIN RECEIVING NOTIFICATION IS IN CODE BASE  ```EmailConstant.java``` REFERENCE IS THE USERNAME AND PASSWORD 
 
-## PERSONAL EXPERIENCE EXPERIENCE 
+## PERSONAL EXPERIENCE 
 The project was assigned to me by Peswa. I am highly motivated for the lessons learnt. 
 1. Learnt the new way of securing spring applications 
 2. Took a short course developing a spring application with mongodb as In have never used mongodb in any spring application
