@@ -1,1 +1,6 @@
 # leave-management-system
+
+ROLES SHOULD BE WRITTEN AS FOLLOWS <br>
+ONLY 2 ROLES ARE RECOGNISED ADMIN AND USER <br>
+```ROLES roles("USER","ADMIN") ```
+<hr>
