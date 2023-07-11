@@ -1,14 +1,18 @@
 package io.leave.manager.service;
 
 import io.leave.manager.collection.LeaveBooking;
-import io.leave.manager.exception.collection.UserNotFoundException;
+import io.leave.manager.dto.LeaveRequest;
+import io.leave.manager.exception.collection.LeaveNotFoundException;
+import io.leave.manager.exception.collection.LeaveRequestException;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
 
 public interface LeaveBookingService {
-    LeaveBooking bookLeave(LeaveBooking leaveBooking, String userId) throws UserNotFoundException, ParseException;
-    LeaveBooking updateBookedLeave(String id, LeaveBooking leaveBooking);
-    void cancelBookedLeave(String id);
-    LeaveBooking findLeaveById(String id);
-
+    LeaveBooking requestForLeave(LeaveRequest request) throws MessagingException;
+    void cancelRequestedLeave(String leaveId, String email) throws LeaveNotFoundException;
+    Optional<LeaveBooking> findLeaveByIdAndUserEmail(String leaveId, String email) throws LeaveNotFoundException;
+    List<LeaveBooking> getPendingLeaveBookings();
 }

@@ -2,7 +2,9 @@ package io.leave.manager.service.impl;
 
 import io.leave.manager.collection.User;
 import io.leave.manager.exception.collection.EmailExistsException;
-import io.leave.manager.exception.collection.EmailNotFoundException;
+import io.leave.manager.exception.collection.InvalidEmailException;
+import io.leave.manager.exception.collection.UserExistsException;
+import io.leave.manager.repository.LeaveBookingRepository;
 import io.leave.manager.repository.UserRepository;
 import io.leave.manager.service.EmailService;
 import io.leave.manager.service.UserService;
@@ -12,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
+import java.util.List;
+import java.util.Optional;
 
-import static io.leave.manager.constant.Authority.SUPER_ADMIN_AUTHORITIES;
-import static io.leave.manager.constant.Authority.USER_AUTHORITIES;
 import static io.leave.manager.constant.UserImplConstant.*;
 
 @Service
@@ -22,39 +24,33 @@ public class UserServiceImpl implements UserService{
     @Autowired private UserRepository userRepository;
     @Autowired private EmailService emailService;
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-
+    @Autowired private LeaveBookingRepository leaveBookingRepository;
 
     @Override
-    public User createEmployee(User user) throws MessagingException, EmailExistsException, EmailNotFoundException {
-        if(!isValidEmail(user.getEmail())) throw new EmailNotFoundException(INVALID_EMAIL);
+    public User createUser(User user) throws MessagingException, EmailExistsException, InvalidEmailException, UserExistsException {
+        if(!isValidEmail(user.getEmail())) throw new InvalidEmailException(INVALID_EMAIL);
+        findUserByUsername(user.getUsername());
         if(findByEmail(user.getEmail()) != null) throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
         User newUser = buildEmployee(user);
-//        emailService.sendRegistrationEmailNotification(user.getEmail());
+        if(user.getRoles().equals("ADMIN")) newUser.setSupervisor(true);
         LOGGER.info(String.format(USER_REGISTRATION_SUCCESSFUL), user.getEmail());
-//        TODO END NOTIFICATION TO SUPERVISOR AS WELL
-//        TODO DO A METHOD OF OVERLOADING FOR SENDING MULTIPLE EMAILS
+        emailService.sendRegistrationEmailNotification(newUser.getEmail(), USER_REGISTRATION_SUCCESSFUL);
         return userRepository.save(newUser);
     }
 
     private User buildEmployee(User user){
-        User newUser = User.builder()
+        return User.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .roles(user.getRoles())
                 .password(encodePassword(user.getPassword()))
                 .build();
+    }
 
-        if(user.getEmail().equals("peswa@peswa.io" ) || user.getEmail().equals("godfred@yahoo.com")) {
-            newUser.setSupervisor(true);
-            newUser.setRole("SUPERVISOR");
-            newUser.setAuthorities(SUPER_ADMIN_AUTHORITIES);
-        }else{
-            newUser.setSupervisor(false);
-            newUser.setRole("USER");
-            newUser.setAuthorities(USER_AUTHORITIES);
-        }
-        return newUser;
+    public List<User> findAllUsers(){
+        return userRepository.findAll();
     }
 
     private static boolean isValidEmail(String email){
@@ -66,7 +62,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(String email) throws EmailExistsException {
+        User user = userRepository.findByEmail(email);
+        if(user == null) throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
+        return user;
+    }
+
+    public User findUserByUsername(String username) throws UserExistsException {
+        User user = userRepository.findByUsername(username);
+        if(user != null) throw new UserExistsException(USERNAME_EXISTS);
+        return null;
     }
 }

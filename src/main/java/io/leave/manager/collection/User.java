@@ -7,8 +7,6 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.userdetails.UserDetails;
-
 
 @Document(collection = "users")
 @Data
@@ -28,8 +26,7 @@ public class User{
     @NotNull(message = "username is required")
     @Indexed(unique = true)
     private String username;
-    private String role;
-    private String[] authorities;
+    private String roles;
     private boolean isSupervisor;
 
 }

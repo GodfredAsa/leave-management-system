@@ -1,36 +1,41 @@
-package io.leave.manager.collection;
+package io.leave.manager.config;
 
-import lombok.Data;
+import io.leave.manager.collection.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
+public class UserInfoUserDetails implements UserDetails {
 
-@Data
-public class UserPrincipal implements UserDetails {
-    private User user;
+    private final String name;
+    private final String password;
+    private final List<GrantedAuthority> authorities;
 
-    public UserPrincipal(User user) {
-        this.user = user;
+    public UserInfoUserDetails(User user) {
+        name=user.getUsername();
+        password=user.getPassword();
+        authorities= Arrays.stream(user.getRoles().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return stream(this.user.getAuthorities()).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.user.getUsername();
+        return name;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override

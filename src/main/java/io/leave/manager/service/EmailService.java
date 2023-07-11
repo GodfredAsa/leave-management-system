@@ -1,6 +1,8 @@
 package io.leave.manager.service;
 
 import com.sun.mail.smtp.SMTPTransport;
+import io.leave.manager.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -14,21 +16,24 @@ import static javax.mail.Message.RecipientType.CC;
 import static javax.mail.Message.RecipientType.TO;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
-    public void sendRegistrationEmailNotification(String email) throws MessagingException {
-        Message message = createEmail(email);
+    private final UserRepository userRepository;
+
+    public void sendRegistrationEmailNotification(String email, String notificationMessage) throws MessagingException {
+        Message message = createEmail(email, notificationMessage);
         SMTPTransport smtpTransport = (SMTPTransport) getEmailSession().getTransport(SIMPLE_MAIL_TRANSFER_PROTOCOL);
         smtpTransport.connect(GMAIL_SMTP_SERVER, USERNAME, PASSWORD);
         smtpTransport.sendMessage(message, message.getAllRecipients());
         smtpTransport.close();
     }
 
-    private Message createEmail(String email) throws MessagingException {
+    private Message createEmail(String email, String notificationMessage) throws MessagingException {
         Message message = new MimeMessage(getEmailSession());
         message.setFrom(new InternetAddress(FROM_EMAIL));
         message.setRecipients(TO, InternetAddress.parse(email, false));
         message.setSubject(EMAIL_SUBJECT);
-        message.setText(EMAIL_MESSAGE);
+        message.setText(notificationMessage);
         message.setRecipients(CC, InternetAddress.parse(CC_EMAIL, false));
         message.setSentDate(new Date());
         message.saveChanges();

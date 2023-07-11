@@ -2,10 +2,12 @@ package io.leave.manager.collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Data
 @Document(collection = "leaves")
@@ -14,13 +16,9 @@ public class LeaveBooking {
     @Id @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
     @NotNull(message = "Start Date Must Not Be Null")
-    @DateTimeFormat(fallbackPatterns = "MM/dd/yyyy")
-    private String startDate;
+    private LocalDate startDate;
     @NotNull(message = "End Date Must Not Be Null")
-    @DateTimeFormat(fallbackPatterns = "MM/dd/yyyy")
-    private String endDate;
+    private LocalDate endDate;
     private String status;
-    private Long duration;
-    @NotNull(message = "Start Date Must Not Be Null")
     private User user;
 }

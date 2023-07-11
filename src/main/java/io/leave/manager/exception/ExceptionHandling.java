@@ -1,8 +1,7 @@
 package io.leave.manager.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import io.leave.manager.exception.collection.EmailNotFoundException;
-import io.leave.manager.exception.collection.UserNotFoundException;
+import io.leave.manager.exception.collection.*;
 import io.leave.manager.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 import static org.springframework.http.HttpStatus.*;
-
+@RestControllerAdvice
 public class ExceptionHandling {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private static final String INTERNAL_SERVER_ERROR_MSG = "An error occurred while processing the request";
@@ -50,4 +50,23 @@ public class ExceptionHandling {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(LeaveNotFoundException.class)
+    public ResponseEntity<HttpResponse> leaveNotFoundException(LeaveNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<HttpResponse> invalidEmailException(InvalidEmailException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(UserExistsException.class)
+    public ResponseEntity<HttpResponse> userExistsException(UserExistsException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<HttpResponse> emailExistsException(EmailExistsException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
 }
