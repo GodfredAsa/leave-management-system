@@ -3,7 +3,6 @@ package io.leave.manager.service.impl;
 import io.leave.manager.collection.LeaveBooking;
 import io.leave.manager.dto.LeaveRequest;
 import io.leave.manager.exception.collection.LeaveNotFoundException;
-import io.leave.manager.exception.collection.LeaveRequestException;
 import io.leave.manager.repository.LeaveBookingRepository;
 import io.leave.manager.repository.UserRepository;
 import io.leave.manager.service.EmailService;
@@ -13,9 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
-import static io.leave.manager.constant.EmailConstant.LEAVE_REQUEST;
-import static io.leave.manager.constant.LeaveConstant.LEAVE_NOT_FOUND;
-import static io.leave.manager.constant.LeaveConstant.PENDING;
+import static io.leave.manager.constant.LeaveConstant.*;
 
 @Service
 @RequiredArgsConstructor
