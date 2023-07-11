@@ -16,9 +16,4 @@ public class EmailConstant {
     public static final String SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required";
     public static final String PENDING_LEAVE_REQUEST = "Pending Leave Request";
     public static final String CONFIRMED_LEAVE_REQUEST = "Confirmed Leave Request";
-
-
-    public static final String LEAVE_REQUEST = """
-                            You have Successfully Requested for a leave.      
-                         """;
 }

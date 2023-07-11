@@ -15,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.util.List;
-import java.util.Optional;
-
 import static io.leave.manager.constant.UserImplConstant.*;
 
 @Service
@@ -68,9 +66,8 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
-    public User findUserByUsername(String username) throws UserExistsException {
+    public void findUserByUsername(String username) throws UserExistsException {
         User user = userRepository.findByUsername(username);
         if(user != null) throw new UserExistsException(USERNAME_EXISTS);
-        return null;
     }
 }

@@ -10,9 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-
 import static org.springframework.http.HttpStatus.*;
+
 @RestControllerAdvice
 public class ExceptionHandling {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
