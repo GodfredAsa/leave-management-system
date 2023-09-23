@@ -29,4 +29,17 @@ public class User{
     private String roles;
     private boolean isSupervisor;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", roles='" + roles + '\'' +
+                ", isSupervisor=" + isSupervisor +
+                '}';
+    }
 }

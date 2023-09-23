@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findByEmail(String email) throws EmailExistsException {
         User user = userRepository.findByEmail(email);
-        if(user == null) throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
-        return user;
+        if(user != null) throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
+        return null;
     }
 
     public void findUserByUsername(String username) throws UserExistsException {
