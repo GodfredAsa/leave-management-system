@@ -4,6 +4,7 @@ import io.leave.manager.collection.User;
 import io.leave.manager.exception.collection.EmailExistsException;
 import io.leave.manager.exception.collection.InvalidEmailException;
 import io.leave.manager.exception.collection.UserExistsException;
+import io.leave.manager.exception.collection.UserNotFoundException;
 import io.leave.manager.repository.LeaveBookingRepository;
 import io.leave.manager.repository.UserRepository;
 import io.leave.manager.service.EmailService;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService{
     @Autowired private LeaveBookingRepository leaveBookingRepository;
 
     @Override
-    public User createUser(User user) throws MessagingException, EmailExistsException, InvalidEmailException, UserExistsException {
+    public User createUser(User user) throws MessagingException, EmailExistsException, InvalidEmailException, UserExistsException, UserNotFoundException {
         if(!isValidEmail(user.getEmail())) throw new InvalidEmailException(INVALID_EMAIL);
         findUserByUsername(user.getUsername());
         if(findByEmail(user.getEmail()) != null) throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
@@ -60,10 +61,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findByEmail(String email) throws EmailExistsException {
+    public User findByEmail(String email) throws UserNotFoundException {
         User user = userRepository.findByEmail(email);
-        if(user != null) throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
-        return null;
+        if(user == null) throw new UserNotFoundException(String.format(USER_WITH_EMAIL_NOT_FOUND, email));
+        return user;
     }
 
     public void findUserByUsername(String username) throws UserExistsException {

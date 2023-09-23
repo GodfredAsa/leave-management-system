@@ -36,7 +36,7 @@ public class UserRestController extends ExceptionHandling {
     }
 
     @RequestMapping(value = "/{email}", method = RequestMethod.GET)
-    public User findByEmail(@PathVariable String email) throws MessagingException, EmailExistsException {
+    public User findByEmail(@PathVariable String email) throws MessagingException, EmailExistsException, UserNotFoundException {
         return userService.findByEmail(email);
     }
 

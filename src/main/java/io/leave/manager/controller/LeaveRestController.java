@@ -4,6 +4,7 @@ import io.leave.manager.collection.LeaveBooking;
 import io.leave.manager.dto.LeaveRequest;
 import io.leave.manager.exception.ExceptionHandling;
 import io.leave.manager.exception.collection.LeaveNotFoundException;
+import io.leave.manager.exception.collection.UserNotFoundException;
 import io.leave.manager.service.LeaveBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class LeaveRestController extends ExceptionHandling {
     private final LeaveBookingService leaveBookingService;
 
     @RequestMapping(value = "/users" , method = RequestMethod.POST)
-    public LeaveBooking requestLeave(@RequestBody LeaveRequest request) throws MessagingException {
+    public LeaveBooking requestLeave(@RequestBody LeaveRequest request) throws MessagingException, UserNotFoundException {
        return leaveBookingService.requestForLeave(request);
     }
 
