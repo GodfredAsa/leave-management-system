@@ -4,6 +4,7 @@ public class UserImplConstant {
     public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
     public static final String NO_USER_FOUND_BY_USERNAME = "No user found by username: ";
     public static final String USERNAME_EXISTS = "User with username Exists!!";
+    public static final String USER_WITH_EMAIL_NOT_FOUND = "User With %s Not Found";
 
     public static final String INVALID_EMAIL = "Invalid User Email";
     public static final String USER_REGISTRATION_SUCCESSFUL = "Registration Successful: ";
